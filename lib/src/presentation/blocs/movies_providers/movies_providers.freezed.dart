@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MovieState {
   List<MovieModel> get movies => throw _privateConstructorUsedError;
+  bool get isLoading => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MovieStateCopyWith<MovieState> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $MovieStateCopyWith<$Res> {
           MovieState value, $Res Function(MovieState) then) =
       _$MovieStateCopyWithImpl<$Res, MovieState>;
   @useResult
-  $Res call({List<MovieModel> movies});
+  $Res call({List<MovieModel> movies, bool isLoading});
 }
 
 /// @nodoc
@@ -46,12 +47,17 @@ class _$MovieStateCopyWithImpl<$Res, $Val extends MovieState>
   @override
   $Res call({
     Object? movies = null,
+    Object? isLoading = null,
   }) {
     return _then(_value.copyWith(
       movies: null == movies
           ? _value.movies
           : movies // ignore: cast_nullable_to_non_nullable
               as List<MovieModel>,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -64,7 +70,7 @@ abstract class _$$_MovieStateCopyWith<$Res>
       __$$_MovieStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<MovieModel> movies});
+  $Res call({List<MovieModel> movies, bool isLoading});
 }
 
 /// @nodoc
@@ -79,12 +85,17 @@ class __$$_MovieStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? movies = null,
+    Object? isLoading = null,
   }) {
     return _then(_$_MovieState(
       movies: null == movies
           ? _value._movies
           : movies // ignore: cast_nullable_to_non_nullable
               as List<MovieModel>,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -92,7 +103,8 @@ class __$$_MovieStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MovieState extends _MovieState {
-  const _$_MovieState({final List<MovieModel> movies = const []})
+  const _$_MovieState(
+      {final List<MovieModel> movies = const [], this.isLoading = true})
       : _movies = movies,
         super._();
 
@@ -105,8 +117,12 @@ class _$_MovieState extends _MovieState {
   }
 
   @override
+  @JsonKey()
+  final bool isLoading;
+
+  @override
   String toString() {
-    return 'MovieState(movies: $movies)';
+    return 'MovieState(movies: $movies, isLoading: $isLoading)';
   }
 
   @override
@@ -114,12 +130,14 @@ class _$_MovieState extends _MovieState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MovieState &&
-            const DeepCollectionEquality().equals(other._movies, _movies));
+            const DeepCollectionEquality().equals(other._movies, _movies) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_movies));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_movies), isLoading);
 
   @JsonKey(ignore: true)
   @override
@@ -129,11 +147,14 @@ class _$_MovieState extends _MovieState {
 }
 
 abstract class _MovieState extends MovieState {
-  const factory _MovieState({final List<MovieModel> movies}) = _$_MovieState;
+  const factory _MovieState(
+      {final List<MovieModel> movies, final bool isLoading}) = _$_MovieState;
   const _MovieState._() : super._();
 
   @override
   List<MovieModel> get movies;
+  @override
+  bool get isLoading;
   @override
   @JsonKey(ignore: true)
   _$$_MovieStateCopyWith<_$_MovieState> get copyWith =>

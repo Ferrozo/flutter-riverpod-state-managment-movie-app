@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.riverpod_movie_app">
    <application
-        android:label="riverpod_movie_app"
+        android:label="movie app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,5 +30,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <uses-permission android:name="android.permission.INTERNET"/>
     </application>
 </manifest>

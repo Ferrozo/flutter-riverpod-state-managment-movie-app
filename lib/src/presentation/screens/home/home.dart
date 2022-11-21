@@ -9,7 +9,9 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<MovieModel> formattedMovies = ref.watch(moviesProviders).movies;
+    List<MovieModel> formattedMovies = ref.watch(moviesProvider).movies;
+    bool isLoading = ref.watch(moviesProvider).isLoading;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -24,26 +26,29 @@ class HomePage extends ConsumerWidget {
                   ),
                   onChanged: (search) async {
                     await ref
-                        .read(moviesProviders.notifier)
+                        .read(moviesProvider.notifier)
                         .filterMovies(search);
                   },
                 ),
               ),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.only(top: 10),
-                  child: ListView.builder(
-                    itemCount: formattedMovies.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      MovieModel movie = formattedMovies[i];
-                      return MovieCard(
-                        movie: movie,
-                      );
-                    },
-                  ),
-                ),
-              )
+              isLoading
+                  ? const Expanded(
+                      child: Center(child: CircularProgressIndicator()))
+                  : Expanded(
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ListView.builder(
+                          itemCount: formattedMovies.length,
+                          itemBuilder: (BuildContext context, int i) {
+                            MovieModel movie = formattedMovies[i];
+                            return MovieCard(
+                              movie: movie,
+                            );
+                          },
+                        ),
+                      ),
+                    )
             ],
           ),
         ),
