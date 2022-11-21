@@ -15,42 +15,32 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Search movie',
-                  ),
-                  onChanged: (search) async {
-                    await ref
-                        .read(moviesProvider.notifier)
-                        .filterMovies(search);
-                  },
+          child: formattedMovies.isNotEmpty
+              ? Column(
+                  children: [
+                    isLoading
+                        ? const Expanded(
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'Search movie',
+                              ),
+                              onChanged: (search) async {
+                                await ref
+                                    .read(moviesProvider.notifier)
+                                    .filterMovies(search);
+                              },
+                            ),
+                          ),
+                  ],
+                )
+              : const Expanded(
+                  child: Center(child: Text('There has no movies on list')),
                 ),
-              ),
-              isLoading
-                  ? const Expanded(
-                      child: Center(child: CircularProgressIndicator()))
-                  : Expanded(
-                      child: Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.only(top: 10),
-                        child: ListView.builder(
-                          itemCount: formattedMovies.length,
-                          itemBuilder: (BuildContext context, int i) {
-                            MovieModel movie = formattedMovies[i];
-                            return MovieCard(
-                              movie: movie,
-                            );
-                          },
-                        ),
-                      ),
-                    )
-            ],
-          ),
         ),
       ),
     );
