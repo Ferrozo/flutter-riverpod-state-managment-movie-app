@@ -1,5 +1,6 @@
 class MovieModel {
   MovieModel({
+    this.id,
     this.title,
     this.year,
     this.genre,
@@ -9,6 +10,7 @@ class MovieModel {
     this.type,
   });
 
+  String? id;
   String? title;
   String? year;
   List<String>? genre;
@@ -18,6 +20,7 @@ class MovieModel {
   String? type;
 
   MovieModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     title = json['title'];
     year = json['year'];
     genre = json['genre'].cast<String>();
@@ -30,6 +33,7 @@ class MovieModel {
   Map<String, dynamic> toJson() {
     // ignore: prefer_collection_literals
     final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = title;
     data['title'] = title;
     data['year'] = year;
     data['genre'] = genre;
