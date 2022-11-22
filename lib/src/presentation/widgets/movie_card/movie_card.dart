@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_movie_app/src/data/models/movie_model.dart';
+import 'package:riverpod_movie_app/src/presentation/blocs/movies_providers/movies_providers.dart';
+import 'package:riverpod_movie_app/src/presentation/widgets/export_widget.dart';
+import 'package:go_router/go_router.dart';
 
-class MovieCard extends StatelessWidget {
+class MovieCard extends ConsumerWidget {
   const MovieCard({Key? key, required this.movie}) : super(key: key);
   final MovieModel movie;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
       child: Container(
@@ -35,11 +39,14 @@ class MovieCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${movie.title} (${movie.year})',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () => context.push('/${movie.id}'),
+                        child: Text(
+                          '${movie.title} (${movie.year})',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Text(
@@ -47,6 +54,50 @@ class MovieCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
                         maxLines: 3,
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blue),
+                              ),
+                              onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return EditModal(movie: movie);
+                                  }),
+                              child: const Text('Edit')),
+                          const Padding(padding: EdgeInsets.all(15)),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(Colors.red),
+                            ),
+                            onPressed: () => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: Text('Delete ${movie.title.toString()}'),
+                                content: const Text('Are you sure?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        deleteMovie(movie.id, ref, context),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: const Text('Yes'),
+                          )
+                        ],
                       )
                     ],
                   ),
@@ -57,5 +108,10 @@ class MovieCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  deleteMovie(movieId, WidgetRef ref, BuildContext context) {
+    ref.read(moviesProvider.notifier).deleteMovie(movieId);
+    Navigator.pop(context);
   }
 }
